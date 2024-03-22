@@ -52,6 +52,8 @@ func main() {
 		log.Fatalf("unable to decode into struct, %v", err)
 	}
 
+	// === Mysql DB ===
+
 	// === Redis ===
 	redisClient := redis.NewClient(&redis.Options{
 		Addr:     config.Redis.Address,
