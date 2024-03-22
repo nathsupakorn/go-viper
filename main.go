@@ -57,8 +57,8 @@ func main() {
 	// === Redis ===
 	redisClient := redis.NewClient(&redis.Options{
 		Addr:     config.Redis.Address,
-		Password: config.Redis.Password, // no password set
-		DB:       config.Redis.Db,       // use default DB
+		Password: config.Redis.Password,
+		DB:       config.Redis.Db,
 	})
 
 	if err := redisClient.Ping(ctx).Err(); err != nil {
