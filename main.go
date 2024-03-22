@@ -1,9 +1,10 @@
 package main
 
 import (
-	"fmt"
+	"context"
 	"log"
 
+	"github.com/redis/go-redis/v9"
 	"github.com/spf13/viper"
 )
 
@@ -11,6 +12,7 @@ type Configuration struct {
 	App     AppConfiguration
 	MysqlDb MysqlConfiguration
 	MongoDb MongoDBConfiguration
+	Redis   RedisCofiguration
 }
 type AppConfiguration struct {
 	Env   string
@@ -29,21 +31,36 @@ type MongoDBConfiguration struct {
 	Connection string
 }
 
+type RedisCofiguration struct {
+	Address  string
+	Password string
+	Db       int
+}
+
 func main() {
+	ctx := context.Background()
+	// === Set up Config ===
 	viper.SetConfigName("config")
 	viper.AddConfigPath(".")
 	if err := viper.ReadInConfig(); err != nil {
 		log.Fatalf("Error reading config file, %s", err)
 	}
 
-	var configuration Configuration
-	err := viper.Unmarshal(&configuration)
+	var config Configuration
+	err := viper.Unmarshal(&config)
 	if err != nil {
 		log.Fatalf("unable to decode into struct, %v", err)
 	}
 
-	fmt.Println(configuration.App)
-	fmt.Println(configuration.MysqlDb)
-	fmt.Println(configuration.MongoDb)
+	// === Redis ===
+	redisClient := redis.NewClient(&redis.Options{
+		Addr:     config.Redis.Address,
+		Password: config.Redis.Password, // no password set
+		DB:       config.Redis.Db,       // use default DB
+	})
+
+	if err := redisClient.Ping(ctx).Err(); err != nil {
+		log.Fatalf("Error connect Redis, %s", err)
+	}
 
 }

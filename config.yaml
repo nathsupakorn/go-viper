@@ -13,6 +13,11 @@ mysqldb:
   password: "password"
   database: "service"
 
+redis:
+  address: "localhost:6379"
+  password: "password"
+  db: 0
+
 log:
   level: "debug"
   format: "json"
