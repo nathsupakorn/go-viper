@@ -27,3 +27,15 @@ services:
       - "./docker/db/data:/var/lib/mysql"
       - "./docker/db/my.cnf:/etc/mysql/conf.d/my.cnf"
       - "./docker/db/sql:/docker-entrypoint-initdb.d"
+
+  # jenkins:
+  #   image: jenkins/jenkins:lts
+  #   privileged: true
+  #   user: root
+  #   ports:
+  #     - 8081:8080
+  #     - 50000:50000
+  #   container_name: jenkins
+  #   volumes:
+  #     - ./docker/jenkins_compose/jenkins_configuration:/var/jenkins_home
+  #     - ./docker/var/run/docker.sock:/var/run/docker.sock
